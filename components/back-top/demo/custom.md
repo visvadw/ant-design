@@ -22,26 +22,7 @@ ReactDOM.render(
     <BackTop>
       <div className="ant-back-top-inner">UP</div>
     </BackTop>
-    Scroll down to see the bottom-right
-    <strong style={{ color: '#57c5f7' }}> blue </strong>
-    button.
-  </div>,
-  mountNode
-);
-````
-
-````css
-#components-back-top-demo-custom .ant-back-top {
-  bottom: 100px;
-}
-#components-back-top-demo-custom .ant-back-top-inner {
-  height: 40px;
-  width: 40px;
-  line-height: 40px;
-  border-radius: 4px;
-  background-color: #57c5f7;
-  color: #fff;
-  text-align: center;
-  font-size: 20px;
-}
+    Scroll down to see the bottom right blue button.
+  </div>
+, mountNode);
 ````
