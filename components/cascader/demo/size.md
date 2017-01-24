@@ -1,5 +1,5 @@
 ---
-order: 7
+order: 6
 title:
   zh-CN: 大小
   en-US: Size
@@ -13,7 +13,7 @@ title:
 
 Cascade selection box of different sizes.
 
-````jsx
+````__react
 import { Cascader } from 'antd';
 
 const options = [{

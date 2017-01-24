@@ -1,9 +1,9 @@
 ---
 category: Components
-chinese: 国际化
+subtitle: 国际化
 cols: 1
 type: Other
-english: LocaleProvider
+title: LocaleProvider
 ---
 
 为组件内建文案提供统一的国际化支持。
@@ -33,4 +33,4 @@ We supply an English locale package. Other language users can create a locale pa
 
 | 参数    | 说明           | 类型              | 默认值        |
 |--------|----------------|------------------|--------------|
-| locale | 语言包配置，语言包可到 `antd/lib/locale-provider/` 目录下寻找 | Object | - |
+| locale | 语言包配置，语言包可到 `antd/lib/locale-provider/` 目录下寻找 | object | - |

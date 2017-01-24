@@ -1,6 +1,6 @@
 ---
 order: 5
-title: 
+title:
   zh-CN: 确认对话框
   en-US: Confirmation modal dialog
 ---
@@ -14,13 +14,13 @@ title:
 To use `confirm()` to popup confirmation modal dialog. Let onCancel/onOk function return a promise object to
 delay closing the dialog.
 
-````jsx
+````__react
 import { Modal, Button } from 'antd';
 const confirm = Modal.confirm;
 
 function showConfirm() {
   confirm({
-    title: 'Are you sure you want to delete this item ?',
+    title: 'Want to delete these items?',
     content: 'When clicked the OK button, this dialog will be closed after 1 second',
     onOk() {
       return new Promise((resolve, reject) => {

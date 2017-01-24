@@ -1,6 +1,6 @@
 ---
-order: 4
-title: 
+order: 3
+title:
   zh-CN: 禁用
   en-US: disabled
 ---
@@ -14,7 +14,7 @@ title:
 A disabled state of the `TimePicker`.
 
 
-````jsx
+````__react
 import { TimePicker } from 'antd';
 import moment from 'moment';
 

@@ -1,6 +1,6 @@
 ---
 order: 0
-title: 
+title:
   zh-CN: 基本
   en-US: Basic
 ---
@@ -13,13 +13,16 @@ title:
 
 The most basic usage.
 
-````jsx
+````__react
 import { BackTop } from 'antd';
 
 ReactDOM.render(
   <div>
     <BackTop />
-    向下滚动后，见右下角灰色按钮
-  </div>
-, mountNode);
+    Scroll down to see the bottom-right
+    <strong style={{ color: 'rgba(64, 64, 64, 0.6)' }}> gray </strong>
+    button.
+  </div>,
+  mountNode
+);
 ````

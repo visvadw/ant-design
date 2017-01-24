@@ -1,35 +1,15 @@
-import * as React from 'react';
+import React from 'react';
 import Tooltip from '../tooltip';
+import { AbstractTooltipProps } from '../tooltip';
 import Icon from '../icon';
 import Button from '../button';
-import getPlacements from '../popover/placements';
-import splitObject from '../_util/splitObject';
 
-const noop = () => {};
-
-export interface PopconfirmProps {
-  /**
-   * Position of popup-container, options:`top`, `left`, `right`, `bottom`
-   */
-  placement?: 'top' | 'left' | 'right' | 'bottom';
-  /** Description of Popconfirm */
+export interface PopconfirmProps extends AbstractTooltipProps {
   title: React.ReactNode;
-  /** Callback when confirm */
   onConfirm?: () => void;
-  /** Callback when cancel */
   onCancel?: () => void;
-  /** Callback when display/hide */
-  onVisibleChange?: (visible: boolean) => void;
-  /** Confirm button text */
   okText?: React.ReactNode;
-  /** Cancel button text */
   cancelText?: React.ReactNode;
-  style?: React.CSSProperties;
-  transitionName?: string;
-  trigger?: 'hover' | 'focus' | 'click';
-  /** Style of overlay */
-  overlayStyle?: React.CSSProperties;
-  prefixCls?: string;
 }
 
 export interface PopconfirmContext {
@@ -44,9 +24,6 @@ export default class Popconfirm extends React.Component<PopconfirmProps, any> {
     transitionName: 'zoom-big',
     placement: 'top',
     trigger: 'click',
-    onConfirm: noop,
-    onCancel: noop,
-    onVisibleChange: noop,
   };
 
   static contextTypes = {
@@ -55,14 +32,15 @@ export default class Popconfirm extends React.Component<PopconfirmProps, any> {
 
   context: PopconfirmContext;
 
-  constructor(props) {
+  constructor(props: PopconfirmProps) {
     super(props);
+
     this.state = {
-      visible: false,
+      visible: props.visible,
     };
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: PopconfirmProps) {
     if ('visible' in nextProps) {
       this.setState({ visible: nextProps.visible });
     }
@@ -70,12 +48,20 @@ export default class Popconfirm extends React.Component<PopconfirmProps, any> {
 
   confirm = () => {
     this.setVisible(false);
-    this.props.onConfirm.call(this);
+
+    const onConfirm = this.props.onConfirm;
+    if (onConfirm) {
+      onConfirm.call(this);
+    }
   }
 
   cancel = () => {
     this.setVisible(false);
-    this.props.onCancel.call(this);
+
+    const onCancel = this.props.onCancel;
+    if (onCancel) {
+      onCancel.call(this);
+    }
   }
 
   onVisibleChange = (visible) => {
@@ -83,22 +69,28 @@ export default class Popconfirm extends React.Component<PopconfirmProps, any> {
   }
 
   setVisible(visible) {
-    if (!('visible' in this.props)) {
+    const props = this.props;
+    if (!('visible' in props)) {
       this.setState({ visible });
     }
-    this.props.onVisibleChange(visible);
+
+    const onVisibleChange = props.onVisibleChange;
+    if (onVisibleChange) {
+      onVisibleChange(visible);
+    }
   }
 
   render() {
-    const [{ prefixCls, title, placement, arrowPointAtCenter }, restProps] = splitObject(
-      this.props,
-      ['prefixCls', 'title', 'placement', 'arrowPointAtCenter']
-    );
-    let { okText, cancelText } = this.props;
-    if (this.context.antLocale && this.context.antLocale.Popconfirm) {
-      okText = okText || this.context.antLocale.Popconfirm.okText;
-      cancelText = cancelText || this.context.antLocale.Popconfirm.cancelText;
+    const { props, context } = this;
+    const { prefixCls, title, placement, ...restProps } = props;
+
+    let { okText, cancelText } = props;
+    const popconfirmLocale = context.antLocale && context.antLocale.Popconfirm;
+    if (popconfirmLocale) {
+      okText = okText || popconfirmLocale.okText;
+      cancelText = cancelText || popconfirmLocale.cancelText;
     }
+
     const overlay = (
       <div>
         <div className={`${prefixCls}-inner-content`}>
@@ -117,7 +109,6 @@ export default class Popconfirm extends React.Component<PopconfirmProps, any> {
     return (
       <Tooltip
         {...restProps}
-        builtinPlacements={getPlacements({ arrowPointAtCenter })}
         prefixCls={prefixCls}
         placement={placement}
         onVisibleChange={this.onVisibleChange}

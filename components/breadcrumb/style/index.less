@@ -3,14 +3,14 @@
 @breadcrumb-prefix-cls: ~"@{ant-prefix}-breadcrumb";
 
 .@{breadcrumb-prefix-cls} {
-  color: #999;
+  color: @text-color-secondary;
   font-size: @font-size-base;
 
   a {
     color: @text-color;
     transition: color .3s;
     &:hover {
-      color: tint(@primary-color, 20%);
+      color: @primary-5;
     }
   }
 

@@ -1,27 +1,32 @@
 <!-- Issue Template -->
 
-<!-- 请按照下列格式报告问题，务必提供复现步骤，否则恕难解决，感谢您的支持。-->
+<!--
+antd 的用法咨询，建议通过以下渠道，官方 issues 目前没有足够精力提供此类咨询服务：
 
-#### 发生问题的环境是：
+1. [Stack Overflow](http://stackoverflow.com/questions/tagged/antd)
+2. [Segment Fault](https://segmentfault.com/t/antd)（中文）
 
-<!-- 务必提供 -->
+如果是报告 bug，请按照下列格式书写，并务必提供复现步骤，否则恕难解决，感谢您的支持。
+-->
 
-- antd 版本:
-- 操作系统及其版本:
-- 浏览器及其版本:
+#### Environment(required)
 
-#### 您做了什么？
+- antd version:
+- OS and its version:
+- Browser and its version:
 
-<!-- 如：引入 antd 了 Button -->
+#### What did you do? Please provide steps to re-produce your problem.
 
-#### 您期待的结果是：
+<!-- e.g. I just imported Button from antd -->
 
-<!-- 如：像官网一样正常显示 -->
+#### What do you expected?
 
-#### 实际上的结果是：
+<!-- e.g. It works fine as official website -->
 
-<!-- 如：样式错位了 -->
+#### What happen?
 
-#### 可重现的在线演示
+<!-- e.g. Style is not as expected. (And it will be better to provide screenshot) -->
 
-<!-- 请修改并 Fork http://codepen.io/benjycui/pen/KgPZrE?editors=001 -->
+#### Re-producible online demo
+
+<!-- Please fork http://codepen.io/benjycui/pen/KgPZrE?editors=001 to re-produce you issue -->

@@ -1,6 +1,7 @@
 ---
 order: 7
-title: 
+debug: true
+title:
   zh-CN: 手动移除
   en-US: Manual to destroy
 ---
@@ -13,7 +14,7 @@ title:
 
 Manually destroying a modal.
 
-````jsx
+````__react
 import { Modal, Button } from 'antd';
 
 function success() {

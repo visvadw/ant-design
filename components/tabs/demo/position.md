@@ -13,7 +13,7 @@ title:
 
 Tab's position: left, right, top or bottom.
 
-````jsx
+````__react
 import { Tabs, Select } from 'antd';
 const TabPane = Tabs.TabPane;
 const Option = Select.Option;
@@ -31,7 +31,7 @@ const Demo = React.createClass({
     return (
       <div>
         <div style={{ marginBottom: 16 }}>
-          页签位置：
+          Tab position：
           <Select value={this.state.tabPosition} onChange={this.changeTabPosition}
             dropdownMatchSelectWidth={false}
           >

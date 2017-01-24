@@ -16,7 +16,7 @@ if (typeof window !== 'undefined') {
 }
 
 import SlickCarousel from 'react-slick';
-import * as React from 'react';
+import React from 'react';
 
 export type CarouselEffect = 'scrollx' | 'fade'
 // Carousel
@@ -45,6 +45,7 @@ export default class Carousel extends React.Component<CarouselProps, any> {
     dots: true,
     arrows: false,
     prefixCls: 'ant-carousel',
+    draggable: false,
   };
 
   render() {
@@ -52,7 +53,6 @@ export default class Carousel extends React.Component<CarouselProps, any> {
 
     if (props.effect === 'fade') {
       props.fade = true;
-      props.draggable = false;
     }
 
     let className = props.prefixCls;
@@ -62,7 +62,7 @@ export default class Carousel extends React.Component<CarouselProps, any> {
 
     return (
       <div className={className}>
-        <SlickCarousel {...props} />
+        <SlickCarousel ref="slick" {...props} />
       </div>
     );
   }

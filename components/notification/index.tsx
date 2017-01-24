@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import Notification from 'rc-notification';
 import Icon from '../icon';
 import assign from 'object-assign';
@@ -14,6 +14,11 @@ export interface ArgsProps {
   onClose?: () => void;
   duration?: number;
   icon?: React.ReactNode;
+}
+
+export interface ConfigProps {
+  top?: number;
+  duration?: number;
 }
 
 function getNotificationInstance(prefixCls) {
@@ -72,7 +77,7 @@ function notice(args) {
 
   getNotificationInstance(outerPrefixCls).notice({
     content: (
-      <div className={`${prefixCls}-content ${iconNode ? `${prefixCls}-with-icon` : ''}`}>
+      <div className={iconNode ? `${prefixCls}-with-icon` : ''}>
         {iconNode}
         <div className={`${prefixCls}-message`}>{args.message}</div>
         <div className={`${prefixCls}-description`}>{args.description}</div>
@@ -87,8 +92,19 @@ function notice(args) {
   });
 }
 
-const api = {
-  open(args) {
+const api: {
+  success?(args: ArgsProps): void;
+  error?(args: ArgsProps): void;
+  info?(args: ArgsProps): void;
+  warn?(args: ArgsProps): void;
+  warning?(args: ArgsProps): void;
+
+  open(args: ArgsProps): void;
+  close(key: string): void;
+  config(options: ConfigProps): void;
+  destroy(): void;
+} = {
+  open(args: ArgsProps) {
     notice(args);
   },
   close(key) {
@@ -96,11 +112,12 @@ const api = {
       notificationInstance.removeNotice(key);
     }
   },
-  config(options) {
-    if ('top' in options) {
+  config(options: ConfigProps) {
+    if (options.top !== undefined) {
       defaultTop = options.top;
+      notificationInstance = null; // delete notificationInstance for new defaultTop
     }
-    if ('duration' in options) {
+    if (options.duration !== undefined) {
       defaultDuration = options.duration;
     }
   },

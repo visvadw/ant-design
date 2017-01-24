@@ -2,7 +2,7 @@
 @import "../../style/mixins/index";
 @import "../../input/style/mixin";
 @import "../../button/style/mixin";
-@import "../../layout/style/mixin";
+@import "../../grid/style/mixin";
 @import "./mixin";
 
 @form-prefix-cls: ~"@{ant-prefix}-form";
@@ -23,6 +23,7 @@ label {
   margin-right: 4px;
   content: "*";
   font-family: SimSun;
+  line-height: 1;
   font-size: @font-size-base;
   color: @label-required-color;
 }
@@ -31,9 +32,8 @@ label {
 input[type="radio"],
 input[type="checkbox"] {
   &[disabled],
-  &.disabled,
-  fieldset[disabled] & {
-    cursor: @cursor-disabled;
+  &.disabled {
+    cursor: not-allowed;
   }
 }
 
@@ -42,19 +42,17 @@ input[type="checkbox"] {
 .@{ant-prefix}-radio-vertical,
 .@{ant-prefix}-checkbox-inline,
 .@{ant-prefix}-checkbox-vertical {
-  &.disabled,
-  fieldset[disabled] & {
-    cursor: @cursor-disabled;
+  &.disabled {
+    cursor: not-allowed;
   }
 }
 
 // These classes are used on elements with <label> descendants
 .@{ant-prefix}-radio,
 .@{ant-prefix}-checkbox {
-  &.disabled,
-  fieldset[disabled] & {
+  &.disabled {
     label {
-      cursor: @cursor-disabled;
+      cursor: not-allowed;
     }
   }
 }
@@ -64,7 +62,8 @@ input[type="checkbox"] {
 .@{form-prefix-cls}-item {
   font-size: @font-size-base;
   margin-bottom: @form-item-margin-bottom;
-  color: #666;
+  color: @text-color;
+  vertical-align: top;
 
   // nested FormItem
   & > &,
@@ -79,7 +78,7 @@ input[type="checkbox"] {
   }
 
   &-with-help {
-    margin-bottom: @form-item-margin-bottom - @font-size-base * @line-height-base - 3;
+    margin-bottom: @form-item-margin-bottom - @font-size-base * @line-height-base;
   }
 
   &-label {
@@ -87,6 +86,9 @@ input[type="checkbox"] {
     vertical-align: middle;
     padding: 7px 0;
     display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 
     label {
       color: @label-color;
@@ -111,12 +113,11 @@ input[type="checkbox"] {
 
 .@{form-prefix-cls}-explain {
   line-height: 1.5;
-  margin-top: 3px;
 }
 
 .@{form-prefix-cls}-explain,
 .@{form-prefix-cls}-extra {
-  color: #999;
+  color: @text-color-secondary;
 }
 
 .@{form-prefix-cls}-text {
@@ -134,6 +135,26 @@ form {
   .has-feedback {
     .@{ant-prefix}-input {
       padding-right: 24px;
+    }
+
+    // Fix overlapping between feedback icon and <Select>'s arrow.
+    // https://github.com/ant-design/ant-design/issues/4431
+    .@{ant-prefix}-select {
+      &-arrow,
+      &-selection__clear {
+        right: 28px;
+      }
+      &-selection-selected-value {
+        padding-right: 42px;
+      }
+    }
+    .@{ant-prefix}-cascader-picker {
+      &-arrow {
+        padding-right: 36px;
+      }
+      &-clear {
+        right: 28px;
+      }
     }
   }
 
@@ -215,23 +236,12 @@ form {
 }
 
 // Form layout
-//== Horizontal Form
-.@{form-prefix-cls}-horizontal {
-  .@{form-prefix-cls}-item {
-    .make-row;
-  }
-
-  .@{ant-prefix}-radio-inline,
-  .@{ant-prefix}-checkbox-inline {
-    vertical-align: baseline;
-  }
-}
-
-// Form layout
 //== Vertical Form
 .@{form-prefix-cls}-vertical {
   .@{form-prefix-cls}-item-label {
     padding: 0 0 8px;
+    display: block;
+    text-align: left;
 
     label:after {
       content: '';
@@ -252,6 +262,7 @@ form {
 
     > div {
       display: inline-block;
+      vertical-align: middle;
     }
   }
 
@@ -269,16 +280,6 @@ form {
   }
 }
 
-.@{form-prefix-cls}-horizontal,
-.@{form-prefix-cls}-inline {
-  label {
-    > input[type="radio"],
-    > input[type="checkbox"] {
-      margin-right: 4px;
-    }
-  }
-}
-
 // Validation state
 .has-success,
 .has-warning,
@@ -289,10 +290,11 @@ form {
     top: 0;
     right: 0;
     visibility: visible;
+    pointer-events: none;
     .square(@input-height-lg);
     line-height: @input-height-lg;
     text-align: center;
-    font-size: 14px;
+    font-size: @font-size-lg;
     animation: zoomIn .3s @ease-out-back;
     .iconfont-font("");
   }
@@ -317,13 +319,8 @@ form {
 }
 
 .has-success {
-  .@{ant-prefix}-input {
-    border-color: @input-border-color;
-    box-shadow: none;
-  }
-
   &.has-feedback:after {
-    content: '\e62f';
+    content: '\e630';
     color: @success-color;
   }
 }
@@ -332,7 +329,7 @@ form {
   .form-control-validation(@warning-color; @warning-color;);
 
   &.has-feedback:after {
-    content: '\e634';
+    content: '\e62c';
     color: @warning-color;
   }
 
@@ -340,20 +337,18 @@ form {
   .@{ant-prefix}-select {
     &-selection {
       border-color: @warning-color;
+    }
+    &-open .@{ant-prefix}-select-selection,
+    &-focused .@{ant-prefix}-select-selection {
       .active(@warning-color);
     }
-    &-arrow {
-      color: @warning-color;
-    }
   }
 
-  //datepicker
-  .@{ant-prefix}-calendar-picker-icon:after {
-    color: @warning-color;
-  }
-
-  //timepicker
-  .@{ant-prefix}-time-picker-icon:after {
+  // arrow and icon
+  .@{ant-prefix}-calendar-picker-icon:after,
+  .@{ant-prefix}-picker-icon:after,
+  .@{ant-prefix}-select-arrow,
+  .@{ant-prefix}-cascader-picker-arrow {
     color: @warning-color;
   }
 
@@ -361,7 +356,10 @@ form {
   .@{ant-prefix}-input-number,
   .@{ant-prefix}-time-picker-input {
     border-color: @warning-color;
-    .active(@warning-color);
+    &-focused,
+    &:focus {
+      .active(@warning-color);
+    }
     &:not([disabled]):hover {
       border-color: @warning-color;
     }
@@ -372,7 +370,7 @@ form {
   .form-control-validation(@error-color; @error-color;);
 
   &.has-feedback:after {
-    content: '\e631';
+    content: '\e62e';
     color: @error-color;
   }
 
@@ -380,21 +378,18 @@ form {
   .@{ant-prefix}-select {
     &-selection {
       border-color: @error-color;
+    }
+    &-open .@{ant-prefix}-select-selection,
+    &-focused .@{ant-prefix}-select-selection {
       .active(@error-color);
     }
-
-    &-arrow {
-      color: @error-color;
-    }
   }
 
-  //datepicker
-  .@{ant-prefix}-calendar-picker-icon:after {
-    color: @error-color;
-  }
-
-  //timepicker
-  .@{ant-prefix}-picker-icon:after {
+  // arrow and icon
+  .@{ant-prefix}-calendar-picker-icon:after,
+  .@{ant-prefix}-picker-icon:after,
+  .@{ant-prefix}-select-arrow,
+  .@{ant-prefix}-cascader-picker-arrow {
     color: @error-color;
   }
 
@@ -402,21 +397,24 @@ form {
   .@{ant-prefix}-input-number,
   .@{ant-prefix}-time-picker-input {
     border-color: @error-color;
-    .active(@error-color);
+    &-focused,
+    &:focus {
+      .active(@error-color);
+    }
     &:not([disabled]):hover {
       border-color: @error-color;
     }
   }
-  .@{ant-prefix}-mention-wrapper,
-  .@{ant-prefix}-mention-wrapper.active {
+  .@{ant-prefix}-mention-wrapper {
     .@{ant-prefix}-mention-editor {
-      border-color: @error-color;
-      .active(@error-color);
-      &:not([disabled]):hover,
-      &:not([disabled]):focus {
+      &,
+      &:not([disabled]):hover {
         border-color: @error-color;
-        .active(@error-color);
       }
+    }
+    &.active .@{ant-prefix}-mention-editor,
+    .@{ant-prefix}-mention-editor:not([disabled]):focus {
+      .active(@error-color);
     }
   }
 }
@@ -425,8 +423,8 @@ form {
   &.has-feedback:after {
     display: inline-block;
     animation: loadingCircle 1s infinite linear;
-    content: "\e6a1";
-    color: #999;
+    content: "\e64d";
+    color: @primary-color;
   }
 }
 
@@ -437,7 +435,7 @@ form {
   .@{ant-prefix}-input,
   .@{ant-prefix}-input-group .@{ant-prefix}-input,
   .@{ant-prefix}-input-group .@{ant-prefix}-input-group-addon {
-    height: 28px;
+    height: @input-height-base;
   }
 }
 

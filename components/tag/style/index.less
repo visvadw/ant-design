@@ -5,7 +5,7 @@
 
 .@{tag-prefix-cls} {
   display: inline-block;
-  line-height: 22px;
+  line-height: 20px;
   height: 22px;
   padding: 0 8px;
   border-radius: @border-radius-base;
@@ -13,11 +13,10 @@
   background: @background-color-base;
   font-size: @font-size-base;
   transition: all 0.3s @ease-in-out-circ;
-  vertical-align: middle;
   opacity: 1;
-  overflow: hidden;
-  margin: 2px 4px 2px 0;
+  margin-right: 8px;
   cursor: pointer;
+  white-space: nowrap;
 
   &:hover {
     opacity: 0.85;
@@ -42,7 +41,7 @@
     cursor: pointer;
     font-weight: bold;
     margin-left: 3px;
-    color: #666;
+    color: @text-color;
     transition: all 0.3s ease;
     opacity: 0.66;
 
@@ -51,11 +50,8 @@
     }
   }
 
-  &-blue,
-  &-green,
-  &-yellow,
-  &-red {
-    border: 0;
+  &-has-color {
+    border-color: transparent;
     &,
     a,
     a:hover,
@@ -79,6 +75,24 @@
 
   &-red {
     background: @error-color;
+  }
+
+  &-checkable {
+    background-color: transparent;
+    border-color: transparent;
+
+    &:hover,
+    &:active,
+    &-checked {
+      color: #fff;
+    }
+    &:hover {
+      background-color: @primary-5;
+    }
+    &:active,
+    &-checked {
+      background-color: @primary-7;
+    }
   }
 
   &-close {

@@ -1,5 +1,5 @@
 ---
-order: 7
+order: 9
 title:
   en-US: Ajax
   zh-CN: 远程加载数据
@@ -19,18 +19,18 @@ This example shows how to fetch and present data from remote server, and how to 
 
 **Note, this example use [Mock API](https://randomuser.me) that you can look up in Network Console.**
 
-````jsx
+````__react
 import { Table } from 'antd';
 import reqwest from 'reqwest';
 
 const columns = [{
-  title: '姓名',
+  title: 'Name',
   dataIndex: 'name',
   sorter: true,
   render: name => `${name.first} ${name.last}`,
   width: '20%',
 }, {
-  title: '性别',
+  title: 'Gender',
   dataIndex: 'gender',
   filters: [
     { text: 'Male', value: 'male' },
@@ -38,7 +38,7 @@ const columns = [{
   ],
   width: '20%',
 }, {
-  title: '邮箱',
+  title: 'Email',
   dataIndex: 'email',
 }];
 
@@ -68,14 +68,14 @@ const Test = React.createClass({
     console.log('params:', params);
     this.setState({ loading: true });
     reqwest({
-      url: 'http://api.randomuser.me',
+      url: 'https://randomuser.me/api',
       method: 'get',
       data: {
         results: 10,
         ...params,
       },
       type: 'json',
-    }).then(data => {
+    }).then((data) => {
       const pagination = this.state.pagination;
       // Read total count from server
       // pagination.total = data.totalCount;

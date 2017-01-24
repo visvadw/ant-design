@@ -1,6 +1,6 @@
 ---
 order: 0
-title: 
+title:
   zh-CN: 点击上传
   en-US: Upload by clicking
 ---
@@ -13,7 +13,7 @@ title:
 
 Classic mode. File selection dialog pops up when upload button is clicked 
 
-````jsx
+````__react
 import { Upload, message, Button, Icon } from 'antd';
 
 const props = {

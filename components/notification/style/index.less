@@ -16,20 +16,16 @@
     padding: @notification-padding;
     border-radius: @border-radius-base;
     box-shadow: @shadow-2;
-    border: 1px solid @border-color-base;
-    background: #fff;
+    background: @component-background;
     line-height: 1.5;
     position: relative;
     margin-bottom: @notification-margin-bottom;
     overflow: hidden;
 
     &-message {
-      font-size: 14px;
+      font-size: @font-size-lg;
       color: @heading-color;
       margin-bottom: 4px;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      overflow: hidden;
       line-height: 20px;
     }
 
@@ -42,7 +38,7 @@
     }
 
     &-with-icon &-message {
-      font-size: 14px;
+      font-size: @font-size-lg;
       margin-left: 48px;
       margin-bottom: 4px;
     }
@@ -53,9 +49,7 @@
     }
 
     &-icon {
-      position: absolute;
-      left: 16px;
-      top: 17px;
+      float: left;
       font-size: 32px;
       line-height: 32px;
 
@@ -75,7 +69,7 @@
 
     &-close-x:after {
       font-size: @font-size-base;
-      content: "\e62d";
+      content: "\e633";
       font-family: "anticon";
       cursor: pointer;
     }
@@ -84,7 +78,7 @@
       position: absolute;
       right: 16px;
       top: 10px;
-      color: @legend-color;
+      color: @text-color-secondary;
       outline: none;
       &:hover {
         color: #404040;

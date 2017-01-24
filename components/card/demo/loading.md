@@ -11,9 +11,9 @@ title:
 
 ## en-US
 
-Shows a loading indicator while the contents of the card are being fetched.
+Shows a loading indicator while the contents of the card is being fetched.
 
-````jsx
+````__react
 import { Card } from 'antd';
 
 ReactDOM.render(

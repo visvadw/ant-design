@@ -1,6 +1,8 @@
 ---
-order: 4
-title: 多行
+order: 5
+title:
+  zh-CN: 多行
+  en-US: Multi-lines Mode
 ---
 
 ## zh-CN
@@ -11,7 +13,7 @@ title: 多行
 
 Multi lines mode.
 
-````jsx
+````__react
 import { Mention } from 'antd';
 const { toString } = Mention;
 
@@ -21,7 +23,7 @@ function onChange(editorState) {
 
 ReactDOM.render(
   <Mention
-    style={{ width: 500, height: 100 }}
+    style={{ width: '100%', height: 100 }}
     onChange={onChange}
     suggestions={['afc163', 'benjycui', 'yiminghe', 'jljsj33', 'dqaria', 'RaoHai']}
     multiLines

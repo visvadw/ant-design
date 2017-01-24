@@ -13,13 +13,14 @@ title:
 
 Customized description content.
 
-````jsx
+````__react
 import { Spin, Alert } from 'antd';
 
 ReactDOM.render(
   <Spin tip="Loading...">
-    <Alert message="消息提示的文案"
-      description="消息提示的辅助性文字介绍消息提示的辅助性文字介绍消息提示的辅助性文字介绍"
+    <Alert
+      message="Alert message title"
+      description="Further details about the context of this alert."
       type="info"
     />
   </Spin>

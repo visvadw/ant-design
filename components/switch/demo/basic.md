@@ -13,7 +13,7 @@ title:
 
 The most basic usage.
 
-````jsx
+````__react
 import { Switch } from 'antd';
 
 function onChange(checked) {
@@ -29,6 +29,5 @@ ReactDOM.render(
 <style>
 .ant-switch {
   margin-bottom: 8px;
-  display: block;
 }
 <style>

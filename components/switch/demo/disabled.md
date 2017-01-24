@@ -13,7 +13,7 @@ Switch 失效状态。
 
 Disabled state of `Switch`.
 
-````jsx
+````__react
 import { Switch, Button } from 'antd';
 
 const Test = React.createClass({
@@ -31,6 +31,7 @@ const Test = React.createClass({
     return (
       <div>
         <Switch disabled={this.state.disabled} />
+        <br />
         <Button type="primary" onClick={this.toggle}>Toggle disabled</Button>
       </div>
     );

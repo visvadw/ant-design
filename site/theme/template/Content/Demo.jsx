@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
+import { Icon } from 'antd';
 import EditButton from './EditButton';
 
 export default class Demo extends React.Component {
@@ -16,16 +18,23 @@ export default class Demo extends React.Component {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.expand === undefined) return;
+  shouldComponentUpdate(nextProps, nextState) {
+    return (this.state.codeExpand || this.props.expand) !== (nextState.codeExpand || nextProps.expand);
+  }
 
-    this.setState({
-      codeExpand: nextProps.expand,
-    });
+  componentDidMount() {
+    const { meta, location } = this.props;
+    if (meta.id === location.hash.slice(1)) {
+      this.anchor.click();
+    }
   }
 
   handleCodeExapnd = () => {
     this.setState({ codeExpand: !this.state.codeExpand });
+  }
+
+  saveAnchor = (anchor) => {
+    this.anchor = anchor;
   }
 
   render() {
@@ -38,9 +47,13 @@ export default class Demo extends React.Component {
       highlightedCode,
       style,
       highlightedStyle,
+      expand,
     } = props;
+    if (!this.liveDemo) {
+      this.liveDemo = meta.iframe ? <iframe src={src} /> : preview(React, ReactDOM);
+    }
 
-    const codeExpand = this.state.codeExpand;
+    const codeExpand = this.state.codeExpand || expand;
     const codeBoxClass = classNames({
       'code-box': true,
       expand: codeExpand,
@@ -59,11 +72,7 @@ export default class Demo extends React.Component {
     return (
       <section className={codeBoxClass} id={meta.id}>
         <section className="code-box-demo">
-          {
-            meta.iframe ?
-              <iframe src={src} /> :
-              preview(React, ReactDOM)
-          }
+          {this.liveDemo}
           {
             style ?
               <style dangerouslySetInnerHTML={{ __html: style }} /> :
@@ -72,16 +81,13 @@ export default class Demo extends React.Component {
         </section>
         <section className="code-box-meta markdown">
           <div className="code-box-title">
-            <a href={`#${meta.id}`}>
+            <a href={`#${meta.id}`} ref={this.saveAnchor}>
               {localizedTitle}
             </a>
-            <EditButton title="在 Github 上编辑此示例！" filename={meta.filename} />
+            <EditButton title={<FormattedMessage id="app.content.edit-page" />} filename={meta.filename} />
           </div>
           {introChildren}
-          <span className="collapse anticon anticon-circle-o-right"
-            onClick={this.handleCodeExapnd}
-            unselectable="none"
-          />
+          <Icon type="down-circle-o" title="Show Code" className="collapse" onClick={this.handleCodeExapnd} />
         </section>
         <section className={highlightClass}
           key="code"
@@ -93,9 +99,7 @@ export default class Demo extends React.Component {
             highlightedStyle ?
               <div key="style" className="highlight">
                 <pre>
-                  <code className="css" dangerouslySetInnerHTML={{
-                    __html: highlightedStyle,
-                  }} />
+                  <code className="css" dangerouslySetInnerHTML={{ __html: highlightedStyle }} />
                 </pre>
               </div> :
               null

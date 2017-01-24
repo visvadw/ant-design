@@ -13,7 +13,7 @@ title:
 
 This will simply display a red badge, without a specific count.
 
-````jsx
+````__react
 import { Badge, Icon } from 'antd';
 
 ReactDOM.render(<div>
@@ -21,7 +21,7 @@ ReactDOM.render(<div>
     <Icon type="notification" />
   </Badge>
   <Badge dot>
-    <a href="#">A Link</a>
+    <a href="#">Link something</a>
   </Badge>
 </div>, mountNode);
 ````

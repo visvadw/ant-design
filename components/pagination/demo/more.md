@@ -13,10 +13,10 @@ title:
 
 More pages.
 
-````jsx
+````__react
 import { Pagination } from 'antd';
 
 ReactDOM.render(
-  <Pagination defaultCurrent={1} total={500} />,
- mountNode);
+  <Pagination defaultCurrent={1} total={500} />
+, mountNode);
 ````

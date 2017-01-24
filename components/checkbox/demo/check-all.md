@@ -13,7 +13,7 @@ title:
 
 The `indeterminate` property can help you to achieve a 'check all' effect.
 
-````jsx
+````__react
 import { Checkbox } from 'antd';
 const CheckboxGroup = Checkbox.Group;
 
@@ -37,7 +37,7 @@ const App = React.createClass({
             onChange={this.onCheckAllChange}
             checked={this.state.checkAll}
           >
-						Check all
+            Check all
           </Checkbox>
         </div>
         <br />

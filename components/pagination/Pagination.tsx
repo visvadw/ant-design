@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import RcPagination from 'rc-pagination';
 import Select from '../select';
 import MiniSelect from './MiniSelect';
@@ -75,7 +75,8 @@ export default class Pagination extends React.Component<PaginationProps, any> {
     }
 
     return (
-      <RcPagination selectComponentClass={selectComponentClass}
+      <RcPagination
+        selectComponentClass={selectComponentClass}
         selectPrefixCls={this.props.selectPrefixCls}
         {...this.props}
         locale={locale}

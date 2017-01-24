@@ -13,14 +13,14 @@ title:
 
 To customize the style or font of the close button.
 
-````jsx
+````__react
 import { Button, notification } from 'antd';
 
-const close = function () {
+const close = () => {
   console.log('Notification was closed. Either the close button was clicked or duration time elapsed.');
 };
 
-const openNotification = function () {
+const openNotification = () => {
   const key = `open${Date.now()}`;
   const btnClick = function () {
     // to hide notification box
@@ -41,8 +41,6 @@ const openNotification = function () {
 };
 
 ReactDOM.render(
-  <div>
-    <Button type="primary" onClick={openNotification}>Open the notification box</Button>
-  </div>,
-mountNode);
+  <Button type="primary" onClick={openNotification}>Open the notification box</Button>
+, mountNode);
 ````

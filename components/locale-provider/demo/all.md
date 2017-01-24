@@ -13,7 +13,7 @@ title:
 
 Components which need localization support are listed here, you can toggle the language in the demo.
 
-````jsx
+````__react
 import { LocaleProvider, Pagination, DatePicker, TimePicker, Calendar,
          Popconfirm, Table, Modal, Button, Select, Transfer, Radio } from 'antd';
 import enUS from 'antd/lib/locale-provider/en_US';
@@ -35,12 +35,6 @@ const columns = [{
   title: 'Age',
   dataIndex: 'age',
 }];
-
-const customLocale = {
-  timezoneOffset: 8 * 60,
-  firstDayOfWeek: 1,
-  minimalDaysInFirstWeek: 1,
-};
 
 const Page = React.createClass({
   getInitialState() {
@@ -93,7 +87,6 @@ const Page = React.createClass({
           <Transfer
             dataSource={[]}
             showSearch
-            titles={['', '']}
             targetKeys={[]}
             render={item => item.title}
           />
@@ -128,10 +121,6 @@ const App = React.createClass({
     }
   },
   render() {
-    const locale = { ...this.state.locale };
-    if (locale.DatePicker) {
-      locale.DatePicker = { ...locale.DatePicker, ...customLocale };
-    }
     return (
       <div>
         <div className="change-locale">
@@ -141,7 +130,7 @@ const App = React.createClass({
             <Radio.Button key="cn">中文</Radio.Button>
           </Radio.Group>
         </div>
-        <LocaleProvider locale={locale}><Page /></LocaleProvider>
+        <LocaleProvider locale={this.state.locale}><Page /></LocaleProvider>
       </div>
     );
   },

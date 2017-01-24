@@ -1,19 +1,10 @@
-import * as React from 'react';
+import React from 'react';
 import Menu, { SubMenu, Item as MenuItem } from 'rc-menu';
 import Dropdown from '../dropdown';
 import Icon from '../icon';
 import Checkbox from '../checkbox';
 import Radio from '../radio';
-
-export interface FilterDropdownMenuWrapperProps {
-  onClick?: Function;
-  children?: any;
-  prefixCls?: string;
-}
-const FilterDropdownMenuWrapper: React.StatelessComponent<FilterDropdownMenuWrapperProps> =
-  ({ onClick, children, prefixCls }) => (
-  <div className={`${prefixCls}-filter-dropdown`} onClick={onClick}>{children}</div>
-);
+import FilterDropdownMenuWrapper from './FilterDropdownMenuWrapper';
 
 export interface FilterMenuProps {
   locale: any;
@@ -21,7 +12,9 @@ export interface FilterMenuProps {
   column: {
     filterMultiple?: boolean,
     filterDropdown?: React.ReactNode,
-    filters?: string[]
+    filters?: string[],
+    filterDropdownVisible?: boolean,
+    onFilterDropdownVisibleChange?: (visible: boolean) => any,
   };
   confirmFilter: (column: Object, selectedKeys: string[]) => any;
   prefixCls: string;
@@ -31,27 +24,51 @@ export interface FilterMenuProps {
 export default class FilterMenu extends React.Component<FilterMenuProps, any> {
   static defaultProps = {
     handleFilter() {},
-    column: null,
+    column: {},
   };
 
   constructor(props) {
     super(props);
 
+    const visible = ('filterDropdownVisible' in props.column) ?
+      props.column.filterDropdownVisible : false;
+
     this.state = {
       selectedKeys: props.selectedKeys,
       keyPathOfSelectedItem: {},    // 记录所有有选中子菜单的祖先菜单
-      visible: false,
+      visible,
     };
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({
-      selectedKeys: nextProps.selectedKeys,
-    });
+    const { column } = nextProps;
+    const newState = {} as {
+      selectedKeys: string[];
+      visible: boolean;
+    };
+    if ('selectedKeys' in nextProps) {
+      newState.selectedKeys = nextProps.selectedKeys;
+    }
+    if ('filterDropdownVisible' in column) {
+      newState.visible = column.filterDropdownVisible;
+    }
+    if (Object.keys(newState).length > 0) {
+      this.setState(newState);
+    }
   }
 
   setSelectedKeys = ({ selectedKeys }) => {
     this.setState({ selectedKeys });
+  }
+
+  setVisible(visible) {
+    const { column } = this.props;
+    if (!('filterDropdownVisible' in column)) {
+      this.setState({ visible });
+    }
+    if (column.onFilterDropdownVisibleChange) {
+      column.onFilterDropdownVisibleChange(visible);
+    }
   }
 
   handleClearFilters = () => {
@@ -61,16 +78,12 @@ export default class FilterMenu extends React.Component<FilterMenuProps, any> {
   }
 
   handleConfirm = () => {
-    this.setState({
-      visible: false,
-    });
+    this.setVisible(false);
     this.confirmFilter();
   }
 
   onVisibleChange = (visible) => {
-    this.setState({
-      visible,
-    });
+    this.setVisible(visible);
     if (!visible) {
       this.confirmFilter();
     }
@@ -85,13 +98,15 @@ export default class FilterMenu extends React.Component<FilterMenuProps, any> {
   renderMenuItem(item) {
     const { column } = this.props;
     const multiple = ('filterMultiple' in column) ? column.filterMultiple : true;
+    const input = multiple ? (
+      <Checkbox checked={this.state.selectedKeys.indexOf(item.value.toString()) >= 0} />
+    ) : (
+      <Radio checked={this.state.selectedKeys.indexOf(item.value.toString()) >= 0} />
+    );
+
     return (
       <MenuItem key={item.value}>
-        {
-          multiple
-            ? <Checkbox checked={this.state.selectedKeys.indexOf(item.value.toString()) >= 0} />
-            : <Radio checked={this.state.selectedKeys.indexOf(item.value.toString()) >= 0} />
-        }
+        {input}
         <span>{item.text}</span>
       </MenuItem>
     );
@@ -107,7 +122,7 @@ export default class FilterMenu extends React.Component<FilterMenuProps, any> {
         const subMenuCls = containSelected ? `${this.props.dropdownPrefixCls}-submenu-contain-selected` : '';
         return (
           <SubMenu title={item.text} className={subMenuCls} key={item.value.toString()}>
-            {item.children.map(child => this.renderMenuItem(child))}
+            {this.renderMenus(item.children)}
           </SubMenu>
         );
       }
@@ -134,9 +149,12 @@ export default class FilterMenu extends React.Component<FilterMenuProps, any> {
     const { column, locale, prefixCls, dropdownPrefixCls } = this.props;
     // default multiple selection in filter dropdown
     const multiple = ('filterMultiple' in column) ? column.filterMultiple : true;
-
-    const menus = column.filterDropdown ? column.filterDropdown : (
-      <FilterDropdownMenuWrapper prefixCls="">
+    const menus = column.filterDropdown ? (
+      <FilterDropdownMenuWrapper>
+        {column.filterDropdown}
+      </FilterDropdownMenuWrapper>
+    ) : (
+      <FilterDropdownMenuWrapper className={`${prefixCls}-dropdown`}>
         <Menu
           multiple={multiple}
           onClick={this.handleMenuItemClick}

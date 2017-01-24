@@ -1,8 +1,8 @@
 ---
-order: 2 
-title: 
+order: 2
+title:
   zh-CN: 三种大小
-  en-US: Three sizes
+  en-US: Three Sizes
 ---
 
 ## zh-CN
@@ -13,7 +13,7 @@ title:
 
 The input box comes in three sizes. large is used in the form, while the medium size is the default.
 
-````jsx
+````__react
 import { TimePicker } from 'antd';
 import moment from 'moment';
 

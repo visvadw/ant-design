@@ -13,7 +13,7 @@ title:
 
 The combination of radio button style.
 
-```jsx
+```__react
 import { Radio } from 'antd';
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
@@ -34,7 +34,7 @@ ReactDOM.render(<div>
   <div style={{ marginTop: 16 }}>
     <RadioGroup onChange={onChange} defaultValue="a">
       <RadioButton value="a">Hangzhou</RadioButton>
-      <RadioButton value="b" disabled>上海</RadioButton>
+      <RadioButton value="b" disabled>Shanghai</RadioButton>
       <RadioButton value="c">Beijing</RadioButton>
       <RadioButton value="d">Chengdu</RadioButton>
     </RadioGroup>

@@ -1,31 +1,18 @@
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import React from 'react';
+import ReactDOM from 'react-dom';
 import addEventListener from 'rc-util/lib/Dom/addEventListener';
 import classNames from 'classnames';
 import shallowequal from 'shallowequal';
 import omit from 'omit.js';
+import getScroll from '../_util/getScroll';
 
-function getScroll(target, top) {
-  const prop = top ? 'pageYOffset' : 'pageXOffset';
-  const method = top ? 'scrollTop' : 'scrollLeft';
-  const isWindow = target === window;
-
-  let ret = isWindow ? target[prop] : target[method];
-  // ie6,7,8 standard mode
-  if (isWindow && typeof ret !== 'number') {
-    ret = window.document.documentElement[method];
-  }
-
-  return ret;
-}
-
-function getTargetRect(target): any {
+function getTargetRect(target): ClientRect {
   return target !== window ?
     target.getBoundingClientRect() :
     { top: 0, left: 0, bottom: 0 };
 }
 
-function getOffset(element, target) {
+function getOffset(element: HTMLElement, target) {
   const elemRect = element.getBoundingClientRect();
   const targetRect = getTargetRect(target);
 
@@ -44,6 +31,13 @@ function getOffset(element, target) {
   };
 }
 
+function noop() {}
+
+function getDefaultTarget() {
+  return typeof window !== 'undefined' ?
+    window : null;
+};
+
 // Affix
 export interface AffixProps {
   /**
@@ -51,9 +45,12 @@ export interface AffixProps {
    */
   offsetTop?: number;
   offset?: number;
+  /** 距离窗口底部达到指定偏移量后触发 */
   offsetBottom?: number;
   style?: React.CSSProperties;
-  onChange?: (affixed?: boolean) => any;
+  /** 固定状态改变时触发的回调函数 */
+  onChange?: (affixed?: boolean) => void;
+  /** 设置 Affix 需要监听其滚动事件的元素，值为一个返回对应 DOM 元素的函数 */
   target?: () => Window | HTMLElement;
   prefixCls?: string;
 }
@@ -65,18 +62,10 @@ export default class Affix extends React.Component<AffixProps, any> {
     target: React.PropTypes.func,
   };
 
-  static defaultProps = {
-    target() {
-      return window;
-    },
-    onChange() {},
-    prefixCls: 'ant-affix',
-  };
-
   scrollEvent: any;
   resizeEvent: any;
+  timeout: any;
   refs: {
-    [key: string]: any;
     fixedNode: HTMLElement;
   };
 
@@ -89,7 +78,7 @@ export default class Affix extends React.Component<AffixProps, any> {
   }
 
   setAffixStyle(e, affixStyle) {
-    const { onChange, target } = this.props;
+    const { onChange = noop, target = getDefaultTarget } = this.props;
     const originalAffixStyle = this.state.affixStyle;
     const isWindow = target() === window;
     if (e.type === 'scroll' && originalAffixStyle && affixStyle && isWindow) {
@@ -119,7 +108,7 @@ export default class Affix extends React.Component<AffixProps, any> {
   }
 
   updatePosition = (e) => {
-    let { offsetTop, offsetBottom, offset, target } = this.props;
+    let { offsetTop, offsetBottom, offset, target = getDefaultTarget } = this.props;
     const targetNode = target();
 
     // Backwards support
@@ -133,8 +122,8 @@ export default class Affix extends React.Component<AffixProps, any> {
     };
 
     const offsetMode = {
-      top: null as boolean,
-      bottom: null as boolean,
+      top: false,
+      bottom: false,
     };
     // Default to `offsetTop=0`.
     if (typeof offsetTop !== 'number' && typeof offsetBottom !== 'number') {
@@ -183,8 +172,11 @@ export default class Affix extends React.Component<AffixProps, any> {
   }
 
   componentDidMount() {
-    const target = this.props.target;
-    this.setTargetEventListeners(target);
+    const target = this.props.target || getDefaultTarget;
+    // Wait for parent component ref has its value
+    this.timeout = setTimeout(() => {
+      this.setTargetEventListeners(target);
+    });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -199,10 +191,14 @@ export default class Affix extends React.Component<AffixProps, any> {
 
   componentWillUnmount() {
     this.clearScrollEventListeners();
+    clearTimeout(this.timeout);
   }
 
   setTargetEventListeners(getTarget) {
     const target = getTarget();
+    if (!target) {
+      return;
+    }
     this.scrollEvent = addEventListener(target, 'scroll', this.updatePosition);
     this.resizeEvent = addEventListener(target, 'resize', this.updatePosition);
   }
@@ -217,7 +213,7 @@ export default class Affix extends React.Component<AffixProps, any> {
 
   render() {
     const className = classNames({
-      [this.props.prefixCls]: this.state.affixStyle,
+      [this.props.prefixCls || 'ant-affix']: this.state.affixStyle,
     });
 
     const props = omit(this.props, ['prefixCls', 'offsetTop', 'offsetBottom', 'target']);

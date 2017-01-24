@@ -1,39 +1,54 @@
-import * as React from 'react';
+import React from 'react';
 import { PropTypes } from 'react';
 import RcSelect, { Option, OptGroup } from 'rc-select';
 import classNames from 'classnames';
 
-export type SelectValue = string | string[] | Array<{ key: string, label: React.ReactNode }>;
+export type SelectValue = string | any[] | { key: string, label: React.ReactNode } |
+ Array<{ key: string, label: React.ReactNode }>;
 
-export interface SelectProps {
-  prefixCls?: string;
+export interface AbstractSelectProps {
+  size?: 'default' | 'large' | 'small';
   className?: string;
+  notFoundContent?: React.ReactNode | null;
+  prefixCls?: string;
+  transitionName?: string;
+  optionLabelProp?: string;
+  choiceTransitionName?: string;
+  showSearch?: boolean;
+  allowClear?: boolean;
+  disabled?: boolean;
+  style?: React.CSSProperties;
+  placeholder?: string;
+}
+
+export interface SelectProps extends AbstractSelectProps {
   value?: SelectValue;
   defaultValue?: SelectValue;
-  size?: 'default' | 'large' | 'small';
   combobox?: boolean;
-  notFoundContent?: React.ReactNode;
-  showSearch?: boolean;
-  transitionName?: string;
-  choiceTransitionName?: string;
   multiple?: boolean;
-  allowClear?: boolean;
   filterOption?: boolean | ((inputValue: string, option: Object) => any);
   tags?: boolean;
   onSelect?: (value: SelectValue, option: Object) => any;
   onDeselect?: (value: SelectValue) => any;
   onSearch?: (value: string) => any;
-  placeholder?: string;
   dropdownMatchSelectWidth?: boolean;
   optionFilterProp?: string;
-  optionLabelProp?: string;
-  disabled?: boolean;
   defaultActiveFirstOption?: boolean;
   labelInValue?: boolean;
-  getPopupContainer?: (triggerNode: React.ReactNode) => React.ReactNode;
-  style?: React.CSSProperties;
+  getPopupContainer?: (triggerNode: React.ReactNode) => React.ReactNode | HTMLElement;
+  dropdownStyle?: React.CSSProperties;
   dropdownMenuStyle?: React.CSSProperties;
-  onChange?: (value) => void;
+  onChange?: (value: SelectValue) => void;
+  tokenSeparators?: string[];
+}
+
+export interface OptionProps {
+  disabled?: boolean;
+  value?: any;
+}
+
+export interface OptGroupProps {
+  label?: string | React.ReactElement<any>;
 }
 
 export interface SelectContext {
@@ -42,11 +57,12 @@ export interface SelectContext {
   };
 }
 
-export { Option, OptGroup }
+// => It is needless to export the declaration of below two inner components.
+// export { Option, OptGroup };
 
 export default class Select extends React.Component<SelectProps, any> {
-  static Option = Option;
-  static OptGroup = OptGroup;
+  static Option = Option as React.ClassicComponentClass<OptionProps>;
+  static OptGroup = OptGroup as React.ClassicComponentClass<OptGroupProps>;
 
   static defaultProps = {
     prefixCls: 'ant-select',
@@ -70,26 +86,26 @@ export default class Select extends React.Component<SelectProps, any> {
   context: SelectContext;
 
   render() {
-    let {
+    const {
       prefixCls,
-      className,
+      className = '',
       size,
       combobox,
-      notFoundContent,
       showSearch,
-      optionLabelProp,
     } = this.props;
+
+    let { notFoundContent = 'Not Found', optionLabelProp } = this.props;
 
     const cls = classNames({
       [`${prefixCls}-lg`]: size === 'large',
       [`${prefixCls}-sm`]: size === 'small',
-      [className]: !!className,
       [`${prefixCls}-show-search`]: showSearch,
-    });
+    }, className);
 
     const { antLocale } = this.context;
     if (antLocale && antLocale.Select) {
-      notFoundContent = notFoundContent || antLocale.Select.notFoundContent;
+      notFoundContent = ('notFoundContent' in this.props)
+        ? notFoundContent : antLocale.Select.notFoundContent;
     }
 
     if (combobox) {
@@ -99,7 +115,8 @@ export default class Select extends React.Component<SelectProps, any> {
     }
 
     return (
-      <RcSelect {...this.props}
+      <RcSelect
+        {...this.props}
         className={cls}
         optionLabelProp={optionLabelProp || 'children'}
         notFoundContent={notFoundContent}

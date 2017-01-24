@@ -13,7 +13,7 @@ title:
 
 Using `OptGroup` to group the options.
 
-````jsx
+````__react
 import { Select } from 'antd';
 const Option = Select.Option;
 const OptGroup = Select.OptGroup;
@@ -29,11 +29,11 @@ ReactDOM.render(
     onChange={handleChange}
   >
     <OptGroup label="Manager">
-      <Option value="jack">jack</Option>
-      <Option value="lucy">lucy</Option>
+      <Option value="jack">Jack</Option>
+      <Option value="lucy">Lucy</Option>
     </OptGroup>
     <OptGroup label="Engineer">
-      <Option value="yiminghe">yiminghe</Option>
+      <Option value="Yiminghe">yiminghe</Option>
     </OptGroup>
   </Select>
 , mountNode);

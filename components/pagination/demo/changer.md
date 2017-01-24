@@ -13,7 +13,7 @@ title:
 
 Change `pageSize`.
 
-````jsx
+````__react
 import { Pagination } from 'antd';
 
 function onShowSizeChange(current, pageSize) {
@@ -21,6 +21,6 @@ function onShowSizeChange(current, pageSize) {
 }
 
 ReactDOM.render(
-  <Pagination showSizeChanger onShowSizeChange={onShowSizeChange} defaultCurrent={3} total={500} />,
- mountNode);
+  <Pagination showSizeChanger onShowSizeChange={onShowSizeChange} defaultCurrent={3} total={500} />
+, mountNode);
 ````

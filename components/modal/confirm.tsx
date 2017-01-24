@@ -1,60 +1,11 @@
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
-import Dialog from './Modal';
-import Icon from '../icon';
-import Button from '../button';
+import React from 'react';
+import ReactDOM from 'react-dom';
 import classNames from 'classnames';
-import { getConfirmLocale } from './locale';
 import assign from 'object-assign';
-
-export interface ActionButtonProps {
-  type: 'primary' | 'ghost' | 'dashed';
-  actionFn: Function;
-  closeModal: Function;
-}
-class ActionButton extends React.Component<ActionButtonProps, any> {
-  constructor(props) {
-    super(props);
-    this.state = {
-      loading: false,
-    };
-  }
-
-  onClick = () => {
-    const { actionFn, closeModal } = this.props;
-    if (actionFn) {
-      let ret;
-      if (actionFn.length) {
-        ret = actionFn(closeModal);
-      } else {
-        ret = actionFn();
-        if (!ret) {
-          closeModal();
-        }
-      }
-      if (ret && ret.then) {
-        this.setState({ loading: true });
-        ret.then((...args) => {
-          // It's unnecessary to set loading=false, for the Modal will be unmounted after close.
-          // this.setState({ loading: false });
-          closeModal(...args);
-        });
-      }
-    } else {
-      closeModal();
-    }
-  }
-
-  render() {
-    const { type, children } = this.props;
-    const loading = this.state.loading;
-    return (
-      <Button type={type} size="large" onClick={this.onClick} loading={loading}>
-        {children}
-      </Button>
-    );
-  }
-}
+import Icon from '../icon';
+import Dialog from './Modal';
+import ActionButton from './ActionButton';
+import { getConfirmLocale } from './locale';
 
 export default function confirm(config) {
   const props = assign({ iconType: 'question-circle' }, config);
@@ -78,7 +29,7 @@ export default function confirm(config) {
 
   function close() {
     const unmountResult = ReactDOM.unmountComponentAtNode(div);
-    if (unmountResult) {
+    if (unmountResult && div.parentNode) {
       div.parentNode.removeChild(div);
     }
   }
@@ -91,14 +42,14 @@ export default function confirm(config) {
     </div>
   );
 
-  let footer = null;
+  let footer: React.ReactElement<any> | null = null;
   if (props.okCancel) {
     footer = (
       <div className={`${prefixCls}-btns`}>
         <ActionButton type="ghost" actionFn={props.onCancel} closeModal={close}>
           {props.cancelText}
         </ActionButton>
-        <ActionButton type="primary" actionFn={props.onOk} closeModal={close}>
+        <ActionButton type="primary" actionFn={props.onOk} closeModal={close} autoFocus>
           {props.okText}
         </ActionButton>
       </div>
@@ -106,32 +57,33 @@ export default function confirm(config) {
   } else {
     footer = (
       <div className={`${prefixCls}-btns`}>
-        <ActionButton type="primary" actionFn={props.onOk} closeModal={close}>
+        <ActionButton type="primary" actionFn={props.onOk} closeModal={close} autoFocus>
           {props.okText}
         </ActionButton>
       </div>
     );
   }
 
-  const classString = classNames({
-    [prefixCls]: true,
+  const classString = classNames(prefixCls, {
     [`${prefixCls}-${props.type}`]: true,
-    [props.className]: !!props.className,
-  });
+  }, props.className);
 
   ReactDOM.render(
     <Dialog
       className={classString}
+      onCancel={close}
       visible
-      closable={false}
       title=""
       transitionName="zoom"
       footer=""
       maskTransitionName="fade"
+      maskClosable={false}
       style={style}
       width={width}
     >
-      <div style={{ zoom: 1, overflow: 'hidden' }}>{body} {footer}</div>
+      <div className={`${prefixCls}-body-wrapper`}>
+        {body} {footer}
+      </div>
     </Dialog>
   , div);
 

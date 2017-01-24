@@ -1,5 +1,5 @@
 ---
-order: 2
+order: 3
 title:
   zh-CN: 移入展开
   en-US: Hover
@@ -13,7 +13,7 @@ title:
 
 Hover to expand sub menu, click to select option.
 
-````jsx
+````__react
 import { Cascader } from 'antd';
 
 const options = [{

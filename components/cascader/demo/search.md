@@ -1,5 +1,5 @@
 ---
-order: 9
+order: 8
 title:
   zh-CN: 搜索
   en-US: Search
@@ -13,7 +13,7 @@ title:
 
 Search and select options directly.
 
-````jsx
+````__react
 import { Cascader } from 'antd';
 
 const options = [{
@@ -40,8 +40,8 @@ const options = [{
   }],
 }];
 
-function onChange(value) {
-  console.log(value);
+function onChange(value, selectedOptions) {
+  console.log(value, selectedOptions);
 }
 
 ReactDOM.render(
@@ -49,7 +49,6 @@ ReactDOM.render(
     options={options}
     onChange={onChange}
     placeholder="Please select"
-    style={{ width: 230 }}
     showSearch
   />,
   mountNode

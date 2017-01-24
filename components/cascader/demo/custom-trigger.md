@@ -1,5 +1,5 @@
 ---
-order: 1
+order: 2
 title:
   zh-CN: 可以自定义显示
   en-US: Custom trigger
@@ -13,7 +13,7 @@ title:
 
 Separate trigger button and result.
 
-````jsx
+````__react
 import { Cascader } from 'antd';
 
 const options = [{

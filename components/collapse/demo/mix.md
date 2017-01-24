@@ -1,19 +1,19 @@
 ---
 order: 2
-title: 
+title:
   zh-CN: 面板嵌套
   en-US: Nested panel
 ---
 
 ## zh-CN
 
-手风琴嵌套折叠面板。
+嵌套折叠面板。
 
 ## en-US
 
-`Collapse` is nested inside the `Accordion`.
+`Collapse` is nested inside the `Collapse`.
 
-````jsx
+````__react
 import { Collapse } from 'antd';
 const Panel = Collapse.Panel;
 
@@ -28,7 +28,7 @@ const text = `
 `;
 
 ReactDOM.render(
-  <Collapse onChange={callback} accordion>
+  <Collapse onChange={callback}>
     <Panel header={'This is panel header 1'} key="1">
       <Collapse defaultActiveKey="1">
         <Panel header={'This is panel nest panel'} key="1">

@@ -1,8 +1,8 @@
-import * as React from 'react';
+import React from 'react';
 import classNames from 'classnames';
 import { findDOMNode } from 'react-dom';
 import Icon from '../icon';
-import splitObject from '../_util/splitObject';
+
 const rxTwoCNChar = /^[\u4e00-\u9fa5]{2}$/;
 const isTwoCNChar = rxTwoCNChar.test.bind(rxTwoCNChar);
 function isString(str) {
@@ -34,12 +34,13 @@ export interface ButtonProps {
   icon?: string;
   shape?: ButtonShape;
   size?: ButtonSize;
-  onClick?: React.FormEventHandler;
-  onMouseUp?: React.FormEventHandler;
+  onClick?: React.FormEventHandler<any>;
+  onMouseUp?: React.FormEventHandler<any>;
   loading?: boolean;
   disabled?: boolean;
   style?: React.CSSProperties;
   prefixCls?: string;
+  className?: string;
 }
 
 export default class Button extends React.Component<ButtonProps, any> {
@@ -47,7 +48,6 @@ export default class Button extends React.Component<ButtonProps, any> {
 
   static defaultProps = {
     prefixCls: 'ant-btn',
-    onClick() {},
     loading: false,
   };
 
@@ -86,7 +86,10 @@ export default class Button extends React.Component<ButtonProps, any> {
     clearTimeout(this.timeout);
     this.timeout = setTimeout(() => this.clearButton(buttonNode), 500);
 
-    this.props.onClick(e);
+    const onClick = this.props.onClick;
+    if (onClick) {
+      onClick(e);
+    }
   }
 
   // Handle auto focus when click button in Chrome
@@ -98,9 +101,7 @@ export default class Button extends React.Component<ButtonProps, any> {
   }
 
   render() {
-    const props = this.props;
-    const [{ type, shape, size, className, htmlType, children, icon, loading, prefixCls }, others] = splitObject(props,
-      ['type', 'shape', 'size', 'className', 'htmlType', 'children', 'icon', 'loading', 'prefixCls']);
+    const { type, shape, size = '', className, htmlType, children, icon, loading, prefixCls, ...others } = this.props;
 
     // large => lg
     // small => sm
@@ -109,28 +110,27 @@ export default class Button extends React.Component<ButtonProps, any> {
       small: 'sm',
     })[size] || '';
 
-    const classes = classNames({
-      [prefixCls]: true,
+    const classes = classNames(prefixCls, {
       [`${prefixCls}-${type}`]: type,
       [`${prefixCls}-${shape}`]: shape,
       [`${prefixCls}-${sizeCls}`]: sizeCls,
       [`${prefixCls}-icon-only`]: !children && icon,
       [`${prefixCls}-loading`]: loading,
-      [className]: className,
-    });
+    }, className);
 
     const iconType = loading ? 'loading' : icon;
-
+    const iconNode = iconType ? <Icon type={iconType} /> : null;
     const kids = React.Children.map(children, insertSpace);
 
     return (
-      <button {...others}
+      <button
+        {...others}
         type={htmlType || 'button'}
         className={classes}
         onMouseUp={this.handleMouseUp}
         onClick={this.handleClick}
       >
-        {iconType ? <Icon type={iconType} /> : null}{kids}
+        {iconNode}{kids}
       </button>
     );
   }

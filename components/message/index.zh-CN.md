@@ -1,9 +1,9 @@
 ---
 category: Components
-chinese: 全局提示
-type: Views
+subtitle: 全局提示
+type: Feedback
 noinstant: true
-english: Message
+title: Message
 ---
 
 全局展示操作反馈信息。
@@ -26,7 +26,7 @@ english: Message
 
 | 参数       | 说明           | 类型                       | 默认值       |
 |------------|----------------|--------------------------|--------------|
-| content    | 提示内容       | React.Element or String    | -           |
+| content    | 提示内容       | string\|ReactNode | -           |
 | duration   | 自动关闭的延时，单位秒 | number               | 1.5          |
 
 还提供了全局配置和全局销毁方法：
@@ -43,5 +43,5 @@ message.config({
 
 | 参数       | 说明                | 类型                       | 默认值       |
 |------------|--------------------|--------------------------|-------------|
-| top        | 消息距离顶部的位置 | Number                      | 24px        |
-| duration   | 默认自动关闭延时，单位秒 | Number                 | 1.5         |
+| top        | 消息距离顶部的位置 | number                      | 24px        |
+| duration   | 默认自动关闭延时，单位秒 | number                 | 1.5         |

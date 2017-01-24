@@ -1,6 +1,8 @@
 ---
 order: 2
-title: 自定义建议
+title: 
+  zh-CN: 自定义建议
+  en-US: Customize Suggestion
 ---
 
 ## zh-CN
@@ -13,7 +15,7 @@ title: 自定义建议
 
 Customize suggestions.
 
-````jsx
+````__react
 import { Mention } from 'antd';
 const Nav = Mention.Nav;
 
@@ -25,6 +27,9 @@ const webFrameworks = [
   { name: 'Django', type: 'Python' },
 ];
 
+function onSelect(suggestion, data) {
+  console.log('onSelect', suggestion, data);
+}
 const CustomNavMention = React.createClass({
   getInitialState() {
     return {
@@ -37,7 +42,7 @@ const CustomNavMention = React.createClass({
       item.name.toLowerCase().indexOf(searchValue) !== -1
     );
     const suggestions = filtered.map(suggestion =>
-      <Nav value={suggestion.name} >
+      <Nav value={suggestion.name} data={suggestion}>
         <span>{suggestion.name} - {suggestion.type} </span>
       </Nav>);
     this.setState({ suggestions });
@@ -46,9 +51,11 @@ const CustomNavMention = React.createClass({
     const { suggestions } = this.state;
     return (
       <Mention
-        style={{ width: 500, height: 100 }}
+        placeholder="@someone"
+        style={{ width: '100%', height: 100 }}
         suggestions={suggestions}
         onSearchChange={this.onSearchChange}
+        onSelect={onSelect}
       />
     );
   },
