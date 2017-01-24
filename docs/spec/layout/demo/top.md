@@ -14,9 +14,18 @@ title:
 
 ## en-US
 
-The first and second level nav are both at the top.
+The first and second levels nav are both at the top.
 
-A top-bottom structure of page layouts is used to top navigation. Generally, the mainnav is placed at the top of the page, and put log, the first level navigation, secondary menu(users, settings, notifications) from left to right in it. We always put contents in a fixed size navigation.( eg: `1200px`), the layout of the whole page is stable, it's not affected by viewing enviroment,; Top-bottom structure is conform to top-bottom viewing habit, it's a classical navigation pattern of websites. This pattern will bring demonstration efficiency up of the mian workarea, but it will also occupie some vertical spaces. And, because the horizontal space of the navigation is limited, this pattern is not suitable for the first level navigation which has too much information.
+A top-bottom structure of page layout is used to top navigation.
+Generally, the mainnav is placed at the top of the page, and includes the logo, plus the first level navigation, 
+and the secondary menu (users, settings, notifications) from left to right in it.
+
+We always put contents in a fixed size navigation (eg: `1200px`), 
+the layout of the whole page is stable, it's not affected by viewing enviroment. 
+Top-bottom structure is conform to top-bottom viewing habit, it's a classical navigation pattern of websites. 
+
+This pattern demonstrates space usage efficiency of the main workarea, while using some vertical space. 
+And, because the horizontal space of the navigation is limited, this pattern is not suitable for the first level navigation that contains too much information or links.
 
 > `<BrowserDemo />` This is for demo, don't need to copy.
 
